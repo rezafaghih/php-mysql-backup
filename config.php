@@ -8,7 +8,7 @@
 define("db_host", "localhost"); // your database host (localhost is default)
 define("db_username", "root"); // your database username (root is default)
 define("db_password", ""); // your database password
-define("db_database", "localhost"); // your database name
+define("db_database", "smpe"); // your database name
 define("db_port", ini_get("mysqli.default_port")); // your database port
 
 // if you have large database and you want to compress it you can use compress -> true
