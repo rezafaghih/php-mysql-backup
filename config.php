@@ -1,10 +1,19 @@
 <?php 
 
-define("host", "localhost"); // your database host (localhost is default)
-define("username", "root"); // your database username (root is default)
-define("password", ""); // your database password
-define("database", "localhost"); // your database name
-define("port", ini_get("mysqli.default_port")); // your database port
+/**
+ * @author Rezafaghih <connect.rezafaghih@gmail.com>
+ * @name mysql backup with php
+ */
+
+define("db_host", "localhost"); // your database host (localhost is default)
+define("db_username", "root"); // your database username (root is default)
+define("db_password", ""); // your database password
+define("db_database", "localhost"); // your database name
+define("db_port", ini_get("mysqli.default_port")); // your database port
 
 // if you have large database and you want to compress it you can use compress -> true
 define("compress", true);
+
+
+define("backup_directory", "backup"); // your backup directory
+define("backup_email", ""); // your backup email address
