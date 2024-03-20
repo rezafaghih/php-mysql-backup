@@ -11,7 +11,7 @@ class backup {
         if ($connection){
             $database = db_database;
             $backupDir = backup_directory;
-            $backupFile = $database . '_' . date('Y-m-d_H-i-s') . '.sql';
+            $backupFile = $backupDir.'/'.$database . '_' . date('Y-m-d_H-i-s') . '.sql';
     
             $export = '';
             $tables = array();
@@ -51,8 +51,31 @@ class backup {
                     backup::zipFile($backupFile, $fileName);
                     unlink($backupFile);
                 }
+
+                backup::deleteOldestFiles ();
             }
         } 
+    }
+
+    public static function deleteOldestFiles (){
+        $scanDIR = scandir(backup_directory);
+        $realFiles = [];
+        $i = 0;
+        foreach ($scanDIR as $key => $value) {
+            if (strlen($value) > 2 and file_exists(backup_directory.'/'.$value)){
+                $realFiles[$i] =$value;
+                $i++;
+            }   
+        }
+
+        if (count($realFiles) > max_count){
+            $realFiles = array_reverse($realFiles);
+            foreach ($realFiles as $k => $v) {
+                if ($k >= max_count){
+                    unlink(backup_directory."/".$v);
+                }    
+            }
+        }
     }
 
     public static function zipFile($file, $zipFile){
@@ -70,7 +93,6 @@ class backup {
             return true;
         }
         return false;
-    
     }
 }
 
