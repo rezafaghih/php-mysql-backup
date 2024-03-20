@@ -5,7 +5,7 @@ use ZipArchive;
 include_once "../autoload.php";
 
 class backup {
-    public static function simpleBackup(){
+    public static function simpleBackup($maxCount = max_count){
         global $connection;
 
         if ($connection){
@@ -52,12 +52,12 @@ class backup {
                     unlink($backupFile);
                 }
 
-                backup::deleteOldestFiles ();
+                backup::deleteOldestFiles ($maxCount);
             }
         } 
     }
 
-    public static function deleteOldestFiles (){
+    public static function deleteOldestFiles ($maxCount){
         $scanDIR = scandir(backup_directory);
         $realFiles = [];
         $i = 0;
@@ -68,10 +68,10 @@ class backup {
             }   
         }
 
-        if (count($realFiles) > max_count){
+        if (count($realFiles) > $maxCount){
             $realFiles = array_reverse($realFiles);
             foreach ($realFiles as $k => $v) {
-                if ($k >= max_count){
+                if ($k >= $maxCount){
                     unlink(backup_directory."/".$v);
                 }    
             }
@@ -96,4 +96,4 @@ class backup {
     }
 }
 
-backup::simpleBackup();
+backup::simpleBackup(7);
