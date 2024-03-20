@@ -11,7 +11,7 @@ class backup {
         if ($connection){
             $database = db_database;
             $backupDir = backup_directory;
-            $backupFile = $database . '_' . date('Y-m-d_H-i-s') . '.sql.gz';
+            $backupFile = $database . '_' . date('Y-m-d_H-i-s') . '.sql';
     
             $export = '';
             $tables = array();
@@ -43,16 +43,34 @@ class backup {
             fwrite($handle,$export);
             fclose($handle);
 
+
+            
             if ($handle !== false) {
-                echo "Backup successful! File saved as: $backupFile";
-            } else {
-                echo "Backup failed!";
+                if (compress == true){
+                    $fileName = str_replace('.sql', ".zip", $backupFile);
+                    backup::zipFile($backupFile, $fileName);
+                    unlink($backupFile);
+                }
             }
         } 
     }
 
-    public static function zipFile($file){
+    public static function zipFile($file, $zipFile){
         $zip = new ZipArchive();
+        $zip->open($zipFile, ZipArchive::CREATE);
+        $zip->addFile($file);
+        $zip->setCompressionIndex(1, ZipArchive::CM_DEFLATE);
+        $zip->close();
+    }
+
+    public static function sendEmail($subject, $text, $header, $to = backup_email){
+        $sendMail = mail($to, $subject, $text, $header);
+        
+        if ($sendMail){
+            return true;
+        }
+        return false;
+    
     }
 }
 
