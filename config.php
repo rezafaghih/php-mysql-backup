@@ -13,7 +13,9 @@ define("db_port", ini_get("mysqli.default_port")); // your database port
 
 // if you have large database and you want to compress it you can use compress -> true
 define("compress", true);
+define("max_count", 5);
+define("backup_log", true);
 
 
-define("backup_directory", "backup"); // your backup directory
+define("backup_directory", "../backup"); // your backup directory
 define("backup_email", ""); // your backup email address
