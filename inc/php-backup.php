@@ -51,7 +51,10 @@ class backup {
                     backup::zipFile($backupFile, $fileName);
                     unlink($backupFile);
                 }
-
+                if (backup_log == true){
+                    backup::createLog();
+                }
+                
                 backup::deleteOldestFiles ($maxCount);
             }
         } 
@@ -94,6 +97,25 @@ class backup {
         }
         return false;
     }
+
+    public static function createLog(){
+        $date = date("Y-m-d");
+        $time = date("H:i:s");
+        if (backup_log == true){
+            $path = "../log/$date.log";
+            $oldContent = '';
+
+            if (file_exists($path)){
+                $oldContent = file_get_contents($path);
+            }
+            $logFile = fopen($path, "w");
+            if (compress == true){
+                fwrite($logFile, "$oldContent Compress backup generated - $date $time"."\n");
+            }else {
+                fwrite($logFile, " $oldContent normal backup generated - $date $time"."\n");
+            }
+        }
+    }
 }
 
-backup::simpleBackup(7);
+backup::simpleBackup();
